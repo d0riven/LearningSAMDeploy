@@ -18,9 +18,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: learning-sam-ci-deploy_sample
-      CodeUri: dist/
-      Handler: sample
-      Runtime: go1.x
+      CodeUri:      dist/
+      Handler:      sample
+      Runtime:      go1.x
       Events:
         CWEvent:
           Type: Schedule
@@ -44,8 +44,33 @@ Resources:
             Version: "2012-10-17"
             Statement:
               -
-                Effect:   "Allow"
-                Resource: "*"
+                Sid:    "SamDeploy"
+                Effect: "Allow"
+                Action:
+                  - "cloudformation:Describe*"
+                  - "cloudformation:Get*"
+                  - "cloudformation:ExecuteChangeSet"
+                  - "cloudformation:Create*"
+                  - "cloudformation:Update*"
+                Resource:
+                  - "*"
+              -
+                Sid:    "SAMValidate"
+                Effect: "Allow"
+                Action:
+                  - "iam:ListPolicies"
+                Resource:
+                  - "*"
+              -
+                Sid:    "SAMPackage"
+                Effect: "Allow"
+                Action:
+                  - "s3:PutObject"
+                Resource:
+                  - "arn:aws:s3:::doriven-lambda-artifacts/learning-sam-ci-deploy/sample/*"
+              -
+                Sid:    "UpdateResourceByCF"
+                Effect: "Allow"
                 Action:
                   - "sns:*"
                   - "cloudwatch:*"
@@ -57,6 +82,8 @@ Resources:
                   - "sqs:*"
                   - "logs:*"
                   - "ec2:Describe*"
+                Resource:
+                  - "*"
                 Condition:
                   StringEquals:
                     'aws:CalledVia':

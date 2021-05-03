@@ -9,7 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    container: doriven/sam-cli-go:1.23.0
+    container:
+      image: doriven/sam-cli-go:1.23.0
     steps:
       -
         uses: actions/checkout@v2

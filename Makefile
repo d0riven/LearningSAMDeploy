@@ -50,6 +50,6 @@ $(output):
 		-t $(template) \
 		--debug \
 		--s3-bucket doriven-lambda-artifacts \
-		--s3-prefix learning-sam-ci-deploy/sample \
+		--s3-prefix learning-sam-ci-deploy/$(APP) \
 		--output-template-file $@
 

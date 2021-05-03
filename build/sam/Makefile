@@ -1,4 +1,4 @@
-REPO := doriven/sam-cli
+REPO := doriven/sam-cli-go
 TAG := 1.23.0
 
 .PHONY: build
