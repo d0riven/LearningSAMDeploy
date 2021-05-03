@@ -8,14 +8,16 @@ on:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
+    container: doriven/sam-cli-go:1.23.0
     steps:
       -
         uses: actions/checkout@v2
       -
-        uses: actions/@v2
+        uses: actions/cache@v2
         with:
-          path:
-            - vendor/
+          path: |
+            vendor/
           key: go-${{ hashFiles('go.sum') }}
           restore-keys: |
             go-
@@ -25,9 +27,9 @@ jobs:
         run: make test
       -
         uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: ap-northeast-1
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
       -
-        run: make deploy
+        run: make deploy SAM=sam
