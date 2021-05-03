@@ -1,0 +1,33 @@
+name: deploy
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        uses: actions/@v2
+        with:
+          path:
+            - vendor/
+          key: go-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            go-
+      -
+        run: make deps
+      -
+        run: make test
+      -
+        uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ap-northeast-1
+      -
+        run: make deploy
