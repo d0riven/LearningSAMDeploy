@@ -35,7 +35,7 @@ deploy: test clean build $(output)
 		-t $(template) \
 		--debug \
 		--s3-bucket doriven-lambda-artifacts \
-		--s3-prefix learning-sam-ci-deploy/sample \
+		--s3-prefix learning-sam-ci-deploy/$(APP) \
 		--no-fail-on-empty-changeset \
 		--capabilities CAPABILITY_IAM \
 		--capabilities CAPABILITY_NAMED_IAM \

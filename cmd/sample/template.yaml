@@ -85,6 +85,6 @@ Resources:
                 Resource:
                   - "*"
                 Condition:
-                  StringEquals:
+                  'ForAnyValue:StringEquals':
                     'aws:CalledVia':
                       - cloudformation.amazonaws.com
