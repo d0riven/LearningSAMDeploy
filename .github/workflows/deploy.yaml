@@ -28,7 +28,6 @@ jobs:
         run: make test
   deploy:
     needs: test
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     container:
       image: doriven/sam-cli-go:1.23.0
