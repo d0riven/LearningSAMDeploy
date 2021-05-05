@@ -1,0 +1,57 @@
+name: deploy
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: doriven/sam-cli-go:1.23.0
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        uses: actions/cache@v2
+        with:
+          path: |
+                vendor/
+          key: go-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            go-
+      -
+        run: make deps
+      -
+        run: make test
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    container:
+      image: doriven/sam-cli-go:1.23.0
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        uses: actions/cache@v2
+        with:
+          path: |
+            vendor/
+          key: go-${{ hashFiles('go.sum') }}
+          restore-keys: |
+            go-
+      -
+        run: make deps
+      -
+        run: make test
+      -
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+      -
+        run: make deploy SAM=sam
