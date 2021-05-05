@@ -42,16 +42,12 @@ data "aws_iam_policy_document" "deploy_sam_ci_sample_deploy" {
 
   statement {
     actions = [
-      "sns:*",
-      "cloudwatch:*",
       "s3:Get*",
       "iam:List*",
       "iam:*Role*",
       "events:*",
       "lambda:*",
-      "sqs:*",
       "logs:*",
-      "ec2:Describe*",
     ]
     resources = ["*"]
 
